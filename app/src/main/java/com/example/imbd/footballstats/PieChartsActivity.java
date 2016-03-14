@@ -62,6 +62,7 @@ public class PieChartsActivity extends Parent {
                     k = 4;
                 }
                 SliceValue sv = new SliceValue((float) playerStats[champNumber][teamNumber][i][k], colors[num]);
+                sv.setLabel(names[num] + " - " + playerStats[champNumber][teamNumber][i][k]);
                 values.add(sv);
             }
 

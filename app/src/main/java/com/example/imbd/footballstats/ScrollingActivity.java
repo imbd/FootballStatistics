@@ -1,9 +1,13 @@
 package com.example.imbd.footballstats;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -16,6 +20,8 @@ public class ScrollingActivity extends Parent {
 
     int champNumber;
     String champ;
+    private static int COLUMNS_NUMBER = 7;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,72 +42,98 @@ public class ScrollingActivity extends Parent {
                 return team1.points > team2.points ? -1 : team1.points == team2.points ? 0 : 1;
             }
         });
-
         TableLayout tableLayout = new TableLayout(this);
-        tableLayout.setStretchAllColumns(true);
-
-        TextView player = new TextView(this);
-        TextView team = new TextView(this);
-        TextView score = new TextView(this);
-        player.setText("Матчи");
-        team.setText("Команда");
-        score.setText("Очки");
-        player.setTextSize(16);
-        team.setTextSize(16);
-        score.setTextSize(16);
-        player.setGravity(Gravity.CENTER_HORIZONTAL);
-        team.setGravity(Gravity.CENTER_HORIZONTAL);
-        score.setGravity(Gravity.CENTER_HORIZONTAL);
-        TableRow first = new TableRow(this);
-        first.addView(team);
-        first.addView(player);
-        first.addView(score);
-        tableLayout.addView(first);
         int teamNumber = numberOfTeams[champNumber];
+        TableRow titles = new TableRow(this);
+        tableLayout.setStretchAllColumns(true);
+        TextView[] columnTitle = new TextView[COLUMNS_NUMBER];
+        for (int i = 0; i < COLUMNS_NUMBER; i++) {
+            columnTitle[i] = new TextView(this);
+            switch (i) {
+
+                case 0:
+                    columnTitle[i].setText("Команда");
+                    break;
+                case 1:
+                    columnTitle[i].setText("Матчи");
+                    break;
+                case 2:
+                    columnTitle[i].setText("Поб");
+                    break;
+                case 3:
+                    columnTitle[i].setText("Нич");
+                    break;
+                case 4:
+                    columnTitle[i].setText("Пор");
+                    break;
+                case 5:
+                    columnTitle[i].setText("Разница");
+                    break;
+                case 6:
+                    columnTitle[i].setText("Очки");
+                    break;
+            }
+            columnTitle[i].setTextSize(16);
+            columnTitle[i].setGravity(Gravity.CENTER_HORIZONTAL);
+            titles.addView(columnTitle[i]);
+        }
+        tableLayout.addView(titles);
         TableRow[] tableRow = new TableRow[teamNumber];
         for (int i = 0; i < teamNumber; i++) {
             tableRow[i] = new TableRow(this);
         }
 
-        TextView[] pl = new TextView[teamNumber];
+        TextView[][] columns = new TextView[teamNumber][COLUMNS_NUMBER - 1];
+        Button[] teamButtons = new Button[teamNumber];
         for (int i = 0; i < teamNumber; i++) {
-            pl[i] = new TextView(this);
-        }
+            teamButtons[i] = new Button(this);
+            teamButtons[i].setBackgroundResource(R.drawable.champ_buttons);
+            teamButtons[i].setText(String.valueOf(teamNames[champNumber][sortTeams[i].teamNumber]));
+            teamButtons[i].setId(i);
+            teamButtons[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int id = v.getId();
+                    Intent intent = new Intent(ScrollingActivity.this, TeamActivity.class);
+                    intent.putExtra("teamName", teamNames[champNumber][sortTeams[id].teamNumber]);
+                    intent.putExtra("teamNumber", sortTeams[id].teamNumber);
+                    intent.putExtra("champNumber", champNumber);
+                    startActivity(intent);
 
-        Button[] tm = new Button[teamNumber];
-        for (int i = 0; i < teamNumber; i++) {
-            tm[i] = new Button(this);
-            tm[i].setBackgroundResource(R.drawable.champ_buttons);
-        }
+                }
+            });
+            tableRow[i].addView(teamButtons[i]);
 
-        TextView[] gl = new TextView[teamNumber];
-        for (int i = 0; i < teamNumber; i++) {
-            gl[i] = new TextView(this);
-        }
+            for (int j = 0; j < COLUMNS_NUMBER - 1; j++) {
+                columns[i][j] = new TextView(this);
+                columns[i][j] = new TextView(this);
+                columns[i][j].setTextSize(16);
+                columns[i][j].setGravity(Gravity.CENTER_HORIZONTAL);
+                columns[i][j].setTypeface(null, Typeface.BOLD);
+                columns[i][j].setTextColor(Color.BLACK);
+                switch (j) {
 
-        for (int i = 0; i < teamNumber; i++) {
-            tableRow[i].addView(tm[i]);
-            tableRow[i].addView(pl[i]);
-            tableRow[i].addView(gl[i]);
-        }
-
-        for (int i = 0; i < teamNumber; i++) {
-            pl[i].setText(String.valueOf(teamStats[champNumber][sortTeams[i].teamNumber][1]));
-            pl[i].setTextSize(16);
-            pl[i].setGravity(Gravity.CENTER_HORIZONTAL);
-            pl[i].setTypeface(null, Typeface.BOLD);
-            pl[i].setTextColor(0xFF000000);
-        }
-
-        for (int i = 0; i < teamNumber; i++) {
-            tm[i].setText(teamNames[champNumber][sortTeams[i].teamNumber]);
-        }
-        for (int i = 0; i < teamNumber; i++) {
-            gl[i].setText(String.valueOf(teamStats[champNumber][sortTeams[i].teamNumber][7]));
-            gl[i].setTextSize(16);
-            gl[i].setGravity(Gravity.CENTER_HORIZONTAL);
-            gl[i].setTypeface(null, Typeface.BOLD);
-            gl[i].setTextColor(0xFF000000);
+                    case 0:
+                        columns[i][j].setText(String.valueOf(teamStats[champNumber][sortTeams[i].teamNumber][1]));
+                        break;
+                    case 1:
+                        columns[i][j].setText(String.valueOf(teamStats[champNumber][sortTeams[i].teamNumber][2]));
+                        break;
+                    case 2:
+                        columns[i][j].setText(String.valueOf(teamStats[champNumber][sortTeams[i].teamNumber][3]));
+                        break;
+                    case 3:
+                        columns[i][j].setText(String.valueOf(teamStats[champNumber][sortTeams[i].teamNumber][4]));
+                        break;
+                    case 4:
+                        columns[i][j].setText(String.valueOf(teamStats[champNumber][sortTeams[i].teamNumber][5]) + "-" + String.valueOf(teamStats[champNumber][sortTeams[i].teamNumber][6]));
+                        break;
+                    case 5:
+                        columns[i][j].setText(String.valueOf(teamStats[champNumber][sortTeams[i].teamNumber][7]));
+                        break;
+                }
+                tableRow[i].addView(columns[i][j]);
+            }
         }
 
         for (int i = 0; i < teamNumber; i++) {
@@ -109,9 +141,11 @@ public class ScrollingActivity extends Parent {
         }
         tableLayout.setGravity(Gravity.CENTER_HORIZONTAL);
         ScrollView sv = new ScrollView(this);
-
+        HorizontalScrollView hsv = new HorizontalScrollView(this);
         sv.addView(tableLayout);
-        setContentView(sv);
+        hsv.addView(sv);
+        setContentView(hsv);
 
     }
+
 }

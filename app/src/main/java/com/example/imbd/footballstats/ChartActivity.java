@@ -49,11 +49,11 @@ public class ChartActivity extends Parent {
 
             axisValues.add(new AxisValue(i).setLabel(teamNames[champNumber][i]/*.substring(0, 3)*/));
 
-            columns.add(new Column(values).setHasLabelsOnlyForSelected(true));
+            columns.add(new Column(values).setHasLabelsOnlyForSelected(false));
+            columns.get(i).setHasLabels(true);
         }
 
         ColumnChartData columnData = new ColumnChartData(columns);
-
         columnData.setAxisXBottom(new Axis(axisValues).setHasLines(true));
         columnData.setAxisYLeft(new Axis().setHasLines(true).setMaxLabelChars(2));
         ColumnChartView chartBottom = (ColumnChartView) findViewById(R.id.chart);

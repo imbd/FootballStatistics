@@ -49,7 +49,10 @@
         <activity android:name=".GraphActivity" />
         <activity android:name=".ChartActivity" />
         <activity android:name=".PieChartsActivity" />
-        <activity android:name=".StatsActivity"></activity>
+        <activity android:name=".StatsActivity" />
+        <activity android:name=".ChampStatisticsActivity" />
+        <activity android:name=".TeamPlayerStatsActivity" />
+        <activity android:name=".ScheduleActivity" />
     </application>
 
 </manifest>

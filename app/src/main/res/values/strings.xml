@@ -127,4 +127,6 @@
     <string name="internetSuggestion">Данная информация может быть недоступной или устаревшей. Если считаете, что интернет есть, то вернитесь к стартовой странице приложения</string>
     <string name="internetTryAgain">Повторите попытку, если есть сомнения</string>
     <string name="internetExplanation">Без подключения к сети некоторая информация может оказаться недоступной</string>
+    <string name="changeChart">Переключиться на другую диаграмму</string>
+    <string name="allMatches">Все матчи</string>
 </resources>

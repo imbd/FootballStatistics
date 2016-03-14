@@ -26,6 +26,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.lang.Math;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -79,12 +80,14 @@ public class Parent extends AppCompatActivity {
         public String name2;
         public String goals1;
         public String goals2;
+        public String date;
 
-        public MatchInfo(String name1, String name2, String goals1, String goals2) {
+        public MatchInfo(String name1, String name2, String goals1, String goals2, String date) {
             this.name1 = name1;
             this.goals1 = goals1;
             this.name2 = name2;
             this.goals2 = goals2;
+            this.date = date;
         }
     }
 
@@ -169,10 +172,6 @@ public class Parent extends AppCompatActivity {
                 myFile.delete();
     }
 
-    /*public static void showAllFilesFolder(String path) {
-        for (File myFile : new File(path).listFiles())
-            if (myFile.isFile()) System.out.println(myFile.getName());
-    }*/
 
     public static boolean isInternetAvailable() {
         noInternet = false;
@@ -230,7 +229,6 @@ public class Parent extends AppCompatActivity {
 
     public void makeRefs(int champNumber, final String champ, final String ref, final String type, int index) {
 
-        //deleteAllFilesFolder(String.valueOf(getFilesDir()));
         try {
             String all_file = "";
 
@@ -641,12 +639,17 @@ public class Parent extends AppCompatActivity {
                 }
                 int week = Integer.valueOf(td.item(1).getTextContent());
                 week--;
+                String date = (td.item(2)).getTextContent();
+                date = date.trim();
+                if (date.contains(",")) {
+                    date = date.substring(0, date.indexOf(","));
+                }
                 String firstTeam = ((Element) td.item(3)).getElementsByTagName("a").item(0).getTextContent();
                 String secondTeam = ((Element) td.item(3)).getElementsByTagName("a").item(1).getTextContent();
                 Element el = (Element) ((Element) td.item(4)).getElementsByTagName("a").item(0);
                 String score1 = el.getElementsByTagName("span").item(0).getTextContent();
                 String score2 = el.getElementsByTagName("span").item(1).getTextContent();
-                results[champNumber][week][curNumber[week]] = new MatchInfo(firstTeam, secondTeam, score1, score2);
+                results[champNumber][week][curNumber[week]] = new MatchInfo(firstTeam, secondTeam, score1, score2, date);
                 curNumber[week]++;
 
             }
